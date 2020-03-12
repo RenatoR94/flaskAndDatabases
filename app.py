@@ -5,8 +5,8 @@ from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-application = Flask(__name__) #Constructor
-application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
+app = Flask(__name__) #Constructor
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 db = SQLAlchemy(application)
 
 class BlogPost(db.Model):
@@ -31,11 +31,11 @@ all_posts = [
     }
 ]
 
-@application.route('/')
+@app.route('/')
 def index():
     return render_template('index.html')
 
-@application.route('/posts', methods=['GET','POST'])
+@app.route('/posts', methods=['GET','POST'])
 def posts():
 
     if request.method == 'POST':
@@ -51,21 +51,21 @@ def posts():
         return render_template('posts.html', posts=all_posts)
 
 
-@application.route('/home/<string:name>')
+@app.route('/home/<string:name>')
 def method(name):
     return "Pepe el gorila tambien conocido como "+ name
-@application.route('/onlyget', methods=['GET'])
+@app.route('/onlyget', methods=['GET'])
 def get_only():
     return 'you can only get this webpage 2'
 
-@application.route('/posts/delete/<int:id>')
+@app.route('/posts/delete/<int:id>')
 def delete(id):
     post = BlogPost.query.get_or_404(id)
     db.session.delete(post)
     db.session.commit()
     return redirect('/posts')
 
-@application.route('/posts/edit/<int:id>', methods=['GET', 'POST'])
+@app.route('/posts/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
     post = BlogPost.query.get_or_404(id)
     if request.method == 'POST':
@@ -77,7 +77,7 @@ def edit(id):
     else:
         return render_template('edit.html', post=post)
 
-@application.route('/posts/new', methods=['GET', 'POST'])
+@app.route('/posts/new', methods=['GET', 'POST'])
 def newest_post():
     if request.method == 'POST':
         post_title = request.form['title']
