@@ -7,7 +7,7 @@ from datetime import datetime
 
 app = Flask(__name__) #Constructor
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
-db = SQLAlchemy(application)
+db = SQLAlchemy(app)
 
 class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
